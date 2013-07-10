@@ -1,0 +1,34 @@
+Randys-MacBook-Air:sample_app admin$ bundle exec spork --bootstrap
+Using RSpec
+Bootstrapping /Users/admin/rails_projects/sample_app/spec/spec_helper.rb.
+Done. Edit /Users/admin/rails_projects/sample_app/spec/spec_helper.rb now with your favorite text editor and follow the instructions.
+
+# Before running Spork, we can get a baseline for the testing overhead by timing our test suite as follows:
+
+Randys-MacBook-Air:sample_app admin$ time bundle exec rspec spec/requests/static_pages_spec.rb
+.........
+
+Finished in 0.29909 seconds
+9 examples, 0 failures
+
+Randomized with seed 27835
+
+
+real	0m8.399s
+user	0m7.564s
+sys	  0m0.760s
+
+# now run our test suite with the --drb (“distributed Ruby”) option and verify that the environment-loading overhead is greatly reduced:
+
+Randys-MacBook-Air:sample_app admin$ time bundle exec rspec spec/requests/static_pages_spec.rb --drb
+.........
+
+Finished in 0.39789 seconds   # the times below are faster, but the "Finished in 0.xxxxxx seconds" is longer!
+9 examples, 0 failures
+
+Randomized with seed 46814
+
+
+real	0m5.403s
+user	0m4.430s
+sys	  0m0.303s
