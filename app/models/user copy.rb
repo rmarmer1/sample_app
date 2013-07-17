@@ -8,22 +8,28 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+require 'bcrypt'
 
 class User < ActiveRecord::Base
-  attr_accessible :name, :email, :password, :password_confirmation
+
+include BCrypt
+
+attr_accessible :name, :email, :password, :password_confirmation  
+
+  validates :name, presence: true, length: {maximum: 50}
+  
   has_secure_password
-
-  before_save { |user| user.email = email.downcase }
-
-  validates :name, presence: true, length: { maximum: 50 }
+  
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence:   true,
-                    format:     { with: VALID_EMAIL_REGEX },
+  
+  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
+                  
+  before_save { |user| user.email = email.downcase }
+  
   validates :password, presence: true, length: { minimum: 6 }
   validates :password_confirmation, presence: true
-  after_validation { self.errors.messages.delete(:password_digest) }
-      
+    
   # This "callback" passes a block to the before_save callback and sets the user’s email 
   # address to a lower-case version of its current value using the downcase string method. 
 end
